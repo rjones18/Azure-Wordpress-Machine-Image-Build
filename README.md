@@ -1,1 +1,1 @@
-# Azure-Wordpress-AMI-Build
+# Azure-Wordpress-Machine-Image-Build 
