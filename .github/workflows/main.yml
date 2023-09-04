@@ -12,8 +12,8 @@ env:
   AZURE_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
 
 jobs:
-  terraform_security_and_deploy:
-    name: Terraform Security and Deploy
+  packer_security_and_deploy:
+    name: Packer Security and Deploy
     runs-on: ubuntu-latest
 
     steps:
