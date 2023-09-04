@@ -45,6 +45,19 @@ jobs:
           unzip packer_1.7.2_linux_amd64.zip
           sudo mv packer /usr/local/bin/
 
+      - name: Install Azure CLI
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y apt-transport-https lsb-release software-properties-common dirmngr -y
+          sudo apt-key --keyring /etc/apt/trusted.gpg.d/Microsoft.gpg adv --keyserver packages.microsoft.com --recv-keys BC528686B50D79E339D3721CEB3E94ADBE1229CF
+          sudo add-apt-repository "deb [arch=amd64] https://packages.microsoft.com/repos/azure-cli/ $(lsb_release -cs) main"
+          sudo apt-get update
+          sudo apt-get install azure-cli
+
+      - name: Azure Login
+        run: |
+          az login --service-principal -u ${{ env.AZURE_CLIENT_ID }} -p ${{ env.AZURE_CLIENT_SECRET }} --tenant ${{ env.AZURE_TENANT_ID }}
+
 
       - name: Packer Build
         run: packer build sample.pkr.hcl
