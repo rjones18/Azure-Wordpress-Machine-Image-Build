@@ -37,8 +37,9 @@ jobs:
           sarif_file: ${{ steps.msdo.outputs.sarifFile }}
 
 
-      - name: Install Packer
+      - name: Install Packer &
         run: |
+          sudo apt-get update
           sudo apt-get install unzip
           wget https://releases.hashicorp.com/packer/1.7.2/packer_1.7.2_linux_amd64.zip
           unzip packer_1.7.2_linux_amd64.zip
@@ -46,11 +47,6 @@ jobs:
 
       - name: Install Azure CLI
         run: |
-          sudo apt-get update
-          sudo apt-get install -y apt-transport-https lsb-release software-properties-common dirmngr -y
-          sudo apt-key --keyring /etc/apt/trusted.gpg.d/Microsoft.gpg adv --keyserver packages.microsoft.com --recv-keys BC528686B50D79E339D3721CEB3E94ADBE1229CF
-          sudo add-apt-repository "deb [arch=amd64] https://packages.microsoft.com/repos/azure-cli/ $(lsb_release -cs) main"
-          sudo apt-get update
           sudo apt-get install azure-cli
 
       - name: Azure Login
