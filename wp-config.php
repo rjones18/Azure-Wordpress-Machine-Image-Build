@@ -18,18 +18,57 @@
  * @package WordPress
  */
 
+// Azure Key Vault configurations
+$azureKeyVaultEndpoint = "https://rj-key.vault.azure.net";
+
+function getAccessToken() {
+    $tokenUrl = "http://169.254.169.254/metadata/identity/oauth2/token?api-version=2018-02-01&resource=https%3A%2F%2Fvault.azure.net";
+    $tokenHeaders = [
+        "Metadata: true"
+    ];
+
+    $tokenContext = stream_context_create([
+        "http" => [
+            "method" => "GET",
+            "header" => $tokenHeaders
+        ]
+    ]);
+
+    $response = file_get_contents($tokenUrl, false, $tokenContext);
+    return json_decode($response)->access_token;
+}
+
+$token = getAccessToken(); // This will get the Azure AD token for the managed identity
+
+function getSecretFromAzureKeyVault($secretName) {
+    global $azureKeyVaultEndpoint, $token;
+    $url = "$azureKeyVaultEndpoint/secrets/$secretName/?api-version=7.0";
+
+    $options = [
+        "http" => [
+            "header" => "Authorization: Bearer $token"
+        ]
+    ];
+
+    $context = stream_context_create($options);
+    $response = file_get_contents($url, false, $context);
+    $secretValue = json_decode($response)->value;
+
+    return $secretValue;
+}
+
 // ** Database settings - You can get this info from your web host ** //
 /** The name of the database for WordPress */
-define( 'DB_NAME', 'test' );
+define( 'DB_NAME', getSecretFromAzureKeyVault('WP-DB-NAME') );
 
 /** Database username */
-define( 'DB_USER', 'test' );
+define( 'DB_USER', getSecretFromAzureKeyVault('WP-USER-NAME') );
 
 /** Database password */
-define( 'DB_PASSWORD', 'test' );
+define( 'DB_PASSWORD', getSecretFromAzureKeyVault('WP-DB-PASSWORD') );
 
 /** Database hostname */
-define( 'DB_HOST', 'test' );
+define( 'DB_HOST', getSecretFromAzureKeyVault('WP-DNS-NAME') );
 
 /** Database charset to use in creating database tables. */
 define( 'DB_CHARSET', 'utf8' );

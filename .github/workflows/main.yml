@@ -55,5 +55,5 @@ jobs:
 
 
       - name: Packer Build
-        run: packer build sample.pkr.hcl
+        run: packer build wordpress.pkr.hcl
 

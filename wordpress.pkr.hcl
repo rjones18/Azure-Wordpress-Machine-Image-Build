@@ -1,7 +1,7 @@
 source "azure-arm" "example" {
   use_azure_cli_auth = true
   managed_image_resource_group_name = "ami-group"
-  managed_image_name                = "test-image-${formatdate("YYYYMMDDhhmmss", timestamp())}"
+  managed_image_name                = "wordpress-image-${formatdate("YYYYMMDDhhmmss", timestamp())}"
 
   os_type         = "Linux"
   image_publisher = "Canonical"
