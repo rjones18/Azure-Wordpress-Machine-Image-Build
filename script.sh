@@ -1,16 +1,7 @@
 #!/bin/bash
 
-# Install Defender for Endpoint Agent
-sudo apt-get update && sudo apt-get install curl -y
-curl -o microsoft-mdatp-public.key https://packages.microsoft.com/keys/microsoft.asc
-sudo apt-key add microsoft-mdatp-public.key
-curl -o mdatp.list https://packages.microsoft.com/config/ubuntu/18.04/prod.list
-sudo mv mdatp.list /etc/apt/sources.list.d/
+# Update
 sudo apt-get update
-sudo apt-get install mdatp
-sudo systemctl start mdatp
-
-
 
 # Install apache2 along with other packages
 sudo apt-get install -y apache2 php php-mysql php-curl mysql-client libapache2-mod-php unzip nano
